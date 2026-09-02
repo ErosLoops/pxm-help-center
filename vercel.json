@@ -1,0 +1,16 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "devCommand": "npm run dev",
+  "env": {
+    "VITE_SUPABASE_URL": {
+      "description": "Supabase 项目 URL（从 Supabase Dashboard 的 Settings > API 获取）"
+    },
+    "VITE_SUPABASE_KEY": {
+      "description": "Supabase 匿名公钥（从 Supabase Dashboard 的 Settings > API 获取）"
+    }
+  },
+  "git": {
+    "silent": false
+  }
+}
