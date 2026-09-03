@@ -628,7 +628,15 @@ if (!SUPABASE_URL || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
 }
 
 const { createClient } = window.supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabase;
+try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch (e) {
+    // 如果已经创建过，使用现有的
+    if (!supabase) {
+        console.error('创建Supabase客户端失败:', e);
+    }
+}
 
         // 应用状态
         const app = {
@@ -894,7 +902,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
                     status: 'draft',
                     created_by: app.user.email,
                     created_at: new Date().toISOString(),
-                    updated_at: new ISOString()
+                    updated_at: new Date().toISOString()
                 }])
                 .select()
                 .single();
