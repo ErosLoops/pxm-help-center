@@ -618,22 +618,17 @@
     </div>
 
     <script>
-        // 配置 - 需要从环境变量获取
-        const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ||
-            (typeof window !== 'undefined' && window.SUPABASE_URL) ||
-            'YOUR_SUPABASE_URL';
+        // 配置 - 从环境变量获取（已经通过 Vercel 设置）
+const SUPABASE_URL = 'https://cxdxwyjajuvketzemncn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_rsd2XIOAv-lycjpzBGgbgA_N_knZA6m';
 
-        const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY ||
-            (typeof window !== 'undefined' && window.SUPABASE_KEY) ||
-            'YOUR_SUPABASE_KEY';
+// 检查是否配置了Supabase
+if (!SUPABASE_URL || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+    alert('请先配置 SUPABASE_URL 和 SUPABASE_KEY');
+}
 
-        // 检查是否配置了Supabase
-        if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
-            alert('请先配置 SUPABASE_URL 和 SUPABASE_KEY');
-        }
-
-        const { createClient } = window.supabase;
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const { createClient } = window.supabase;
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // 应用状态
         const app = {
