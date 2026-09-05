@@ -1025,16 +1025,30 @@ async function showEmailInputDialog() {
                 const email = await showEmailInputDialog();
                 if (email) {
                     try {
-                        const { data, error } = await supabaseClient.auth.signInWithOtp({
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
                             email: email,
-                            options: {
-                                emailRedirectTo: "https://pxm-help-center.vercel.app"
+                            password: 'dummy-password'
+                        }).catch(async (err) => {
+                            // 如果用户不存在，用 Magic Link 创建账户
+                            if (err?.status === 400) {
+                                return await supabaseClient.auth.signInWithOtp({
+                                    email: email,
+                                    options: {
+                                        emailRedirectTo: "https://pxm-help-center.vercel.app"
+                                    }
+                                });
                             }
+                            throw err;
                         });
                         if (error) throw error;
                         alert('登录链接已发送到你的邮箱，请检查邮件');
                     } catch (err) {
-                        alert('错误: ' + err.message);
+                        // 如果是速率限制，显示友好提示
+                        if (err?.message?.includes('rate limit')) {
+                            alert('请求过于频繁，请稍后再试');
+                        } else {
+                            alert('错误: ' + (err?.message || '未知错误'));
+                        }
                     }
                 }
             });
