@@ -1025,11 +1025,16 @@ async function showEmailInputDialog() {
                 const email = await showEmailInputDialog();
                 if (email) {
                     try {
-                        // 直接使用OTP方式（Magic Link）登录
+// 根据当前环境设置重定向 URL
+                        const currentUrl = window.location.origin;
+                        const redirectUrl = currentUrl.includes('localhost')
+                            ? currentUrl  // 本地开发环境
+                            : "https://pxm-help-center.vercel.app";  // 生产环境
+
                         const { data, error } = await supabaseClient.auth.signInWithOtp({
                             email: email,
                             options: {
-                                emailRedirectTo: "https://pxm-help-center.vercel.app"
+                                emailRedirectTo: redirectUrl
                             }
                         });
 
