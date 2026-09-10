@@ -969,7 +969,7 @@
             // Update editor
             document.getElementById('articleTitle').value = article.title || '';
             document.getElementById('articleCategory').value = article.category || '';
-            quill.setContents(JSON.parse(article.content_delta || '{"ops":[]}'));
+            quill.root.innerHTML = article.content || '';
 
             // Show editor content
             document.getElementById('emptyStateEdit').style.display = 'none';
@@ -994,7 +994,6 @@
                     return;
                 }
 
-                const contentDelta = quill.getContents();
                 const contentHtml = quill.root.innerHTML;
 
                 const { error } = await supabaseClient
@@ -1003,7 +1002,6 @@
                         title,
                         category: document.getElementById('articleCategory').value,
                         content: contentHtml,
-                        content_delta: JSON.stringify(contentDelta),
                         updated_at: new Date().toISOString()
                     })
                     .eq('id', appState.currentArticle.id);
@@ -1012,7 +1010,6 @@
 
                 appState.currentArticle.title = title;
                 appState.currentArticle.content = contentHtml;
-                appState.currentArticle.content_delta = JSON.stringify(contentDelta);
 
                 showAlert('文章已保存', 'success');
                 await loadArticles();
@@ -1033,7 +1030,6 @@
                         title,
                         category: '',
                         content: '',
-                        content_delta: JSON.stringify({ ops: [] }),
                         created_by: appState.user.email,
                         created_at: new Date().toISOString(),
                         updated_at: new Date().toISOString()
