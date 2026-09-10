@@ -213,6 +213,7 @@
             flex-direction: column;
             overflow: hidden;
             background: var(--bg-light);
+            position: relative;
         }
 
         .view-selector {
@@ -221,6 +222,8 @@
             padding: 15px 20px;
             border-bottom: 1px solid var(--border);
             background: var(--bg-white);
+            z-index: 10;
+            flex-shrink: 0;
         }
 
         .view-button {
@@ -247,13 +250,19 @@
 
         /* Editor View */
         .editor-container {
-            flex: 1;
-            padding: 30px;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
             overflow-y: auto;
-            background: var(--bg-white);
-            margin: 10px;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
+            background: var(--bg-light);
+            display: none;
+        }
+
+        .editor-container.active {
+            display: block;
         }
 
         .editor-form {
@@ -262,6 +271,10 @@
             gap: 20px;
             max-width: 900px;
             margin: 0 auto;
+            background: var(--bg-white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
         }
 
         .form-group {
@@ -323,12 +336,19 @@
 
         /* Preview View */
         .preview-container {
-            flex: 1;
-            padding: 30px;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
             overflow-y: auto;
-            background: var(--bg-white);
-            margin: 10px;
-            border-radius: 8px;
+            background: var(--bg-light);
+            display: none;
+        }
+
+        .preview-container.active {
+            display: block;
         }
 
         .preview-title {
@@ -772,7 +792,7 @@
                     </div>
 
                     <!-- Edit View -->
-                    <div id="editView" class="editor-container">
+                    <div id="editView" class="editor-container active">
                         <div id="emptyStateEdit" class="empty-state">
                             <div class="empty-icon">📝</div>
                             <div class="empty-text">选择或创建一篇文章开始编辑</div>
@@ -814,7 +834,7 @@
                             <div class="empty-text">选择文章进行预览</div>
                         </div>
 
-                        <div id="previewContent" style="display: none;">
+                        <div id="previewContent" style="display: none; background: var(--bg-white); padding: 30px; border-radius: 8px; box-shadow: var(--shadow);">
                             <h1 class="preview-title" id="previewTitle"></h1>
                             <div class="preview-meta">
                                 <span>📁 <span id="previewCategory"></span></span>
@@ -1133,16 +1153,16 @@
             document.getElementById('deleteBtn').addEventListener('click', deleteArticle);
 
             document.getElementById('editViewBtn').addEventListener('click', () => {
-                document.getElementById('editView').style.display = 'block';
-                document.getElementById('previewView').style.display = 'none';
+                document.getElementById('editView').classList.add('active');
+                document.getElementById('previewView').classList.remove('active');
                 document.getElementById('editViewBtn').classList.add('active');
                 document.getElementById('previewViewBtn').classList.remove('active');
             });
 
             document.getElementById('previewViewBtn').addEventListener('click', () => {
                 updatePreview();
-                document.getElementById('editView').style.display = 'none';
-                document.getElementById('previewView').style.display = 'block';
+                document.getElementById('editView').classList.remove('active');
+                document.getElementById('previewView').classList.add('active');
                 document.getElementById('editViewBtn').classList.remove('active');
                 document.getElementById('previewViewBtn').classList.add('active');
             });
